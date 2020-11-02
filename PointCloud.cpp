@@ -176,7 +176,7 @@ void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint
 	glBindVertexArray(VAO);
 
 	// Draw the points using triangles, indexed with the EBO
-	glDrawElements(GL_TRIANGLES, points.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, sizeof(glm::vec3) * points.size(), GL_UNSIGNED_INT, 0);
 
 	// Unbind the VAO and shader program
 	glBindVertexArray(0);
