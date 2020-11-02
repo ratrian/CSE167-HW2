@@ -63,7 +63,6 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 
 				// Process the index.
 				indices.push_back(pIdx);
-				//indices.push_back(nIdx);
 			}
 		}
 	}
