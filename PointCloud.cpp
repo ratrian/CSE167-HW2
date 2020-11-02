@@ -37,7 +37,7 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 				vertices.push_back(vertex);
 			}
 			// If the line is about vertex normal (starting with a "vn").
-			if (label == "vn")
+			else if (label == "vn")
 			{
 				// Read the later three float numbers and use them as the coordinates.
 				glm::vec3 vertexNormal;
@@ -47,19 +47,19 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 				vertexNormals.push_back(vertexNormal);
 			}
 			// If the line is about face (starting with a "f").
-			if (label == "f")
+			else if (label == "f")
 			{
 				// Read the later three integers and use them as the indices.			
 				string one, two, three;
 				ss >> one >> two >> three;
 
 				glm::ivec3 vIdx, vnIdx;
-				vIdx.x = stoi(one.substr(0, one.find("//")));
-				vnIdx.x = stoi(one.substr(one.find("//") + 2));
-				vIdx.y = stoi(two.substr(0, two.find("//")));
-				vnIdx.y = stoi(two.substr(two.find("//") + 2));
-				vIdx.z = stoi(three.substr(0, three.find("//")));
-				vnIdx.z = stoi(three.substr(three.find("//") + 2));
+				vIdx.x = stoi(one.substr(0, one.find("//"))) - 1;
+				vnIdx.x = stoi(one.substr(one.find("//") + 2)) - 1;
+				vIdx.y = stoi(two.substr(0, two.find("//"))) - 1;
+				vnIdx.y = stoi(two.substr(two.find("//") + 2)) - 1;
+				vIdx.z = stoi(three.substr(0, three.find("//"))) - 1;
+				vnIdx.z = stoi(three.substr(three.find("//") + 2)) - 1;
 
 				// Process the index.
 				vIndices.push_back(vIdx);
