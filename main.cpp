@@ -6,6 +6,25 @@ void error_callback(int error, const char* description)
 	std::cerr << description << std::endl;
 }
 
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	//
+}
+
+void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	double pos_x = xpos;
+	double pos_y = ypos;
+	//
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	double x_off = xoffset;
+	double y_off = yoffset;
+	//
+}
+
 void setup_callbacks(GLFWwindow* window)
 {
 	// Set the error callback.
@@ -16,6 +35,15 @@ void setup_callbacks(GLFWwindow* window)
 
 	// Set the key callback.
 	glfwSetKeyCallback(window, Window::keyCallback);
+
+	// Set the mouse button callback.
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+	// Set the cursor position callback.
+	glfwSetCursorPosCallback(window, cursor_pos_callback);
+
+	// Set the scroll callback.
+	glfwSetScrollCallback(window, scroll_callback);
 }
 
 void setup_opengl_settings()
