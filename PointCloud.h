@@ -15,13 +15,11 @@ using namespace std;
 class PointCloud : public Object
 {
 private:
-	std::vector<glm::vec3> vertices;
-	std::vector<glm::vec3> vertexNormals;
+	std::vector<glm::vec3> points;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::ivec3> indices;
 
-	std::vector<glm::ivec3> vIndices;
-	std::vector<glm::ivec3> vnIndices;
-
-	GLuint VAO, VBO;
+	GLuint VAO, VBO, EBO;
 	GLfloat pointSize;
 
 public:

@@ -30,21 +30,21 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 			if (label == "v")
 			{
 				// Read the later three float numbers and use them as the coordinates.
-				glm::vec3 vertex;
-				ss >> vertex.x >> vertex.y >> vertex.z;
+				glm::vec3 point;
+				ss >> point.x >> point.y >> point.z;
 
 				// Process the point.
-				vertices.push_back(vertex);
+				points.push_back(point);
 			}
 			// If the line is about vertex normal (starting with a "vn").
 			else if (label == "vn")
 			{
 				// Read the later three float numbers and use them as the coordinates.
-				glm::vec3 vertexNormal;
-				ss >> vertexNormal.x >> vertexNormal.y >> vertexNormal.z;
+				glm::vec3 normal;
+				ss >> normal.x >> normal.y >> normal.z;
 
 				// Process the normal.
-				vertexNormals.push_back(vertexNormal);
+				normals.push_back(normal);
 			}
 			// If the line is about face (starting with a "f").
 			else if (label == "f")
@@ -53,17 +53,17 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 				string one, two, three;
 				ss >> one >> two >> three;
 
-				glm::ivec3 vIdx, vnIdx;
-				vIdx.x = stoi(one.substr(0, one.find("//"))) - 1;
-				vnIdx.x = stoi(one.substr(one.find("//") + 2)) - 1;
-				vIdx.y = stoi(two.substr(0, two.find("//"))) - 1;
-				vnIdx.y = stoi(two.substr(two.find("//") + 2)) - 1;
-				vIdx.z = stoi(three.substr(0, three.find("//"))) - 1;
-				vnIdx.z = stoi(three.substr(three.find("//") + 2)) - 1;
+				glm::ivec3 pIdx, nIdx;
+				pIdx.x = stoi(one.substr(0, one.find("//"))) - 1;
+				nIdx.x = stoi(one.substr(one.find("//") + 2)) - 1;
+				pIdx.y = stoi(two.substr(0, two.find("//"))) - 1;
+				nIdx.y = stoi(two.substr(two.find("//") + 2)) - 1;
+				pIdx.z = stoi(three.substr(0, three.find("//"))) - 1;
+				nIdx.z = stoi(three.substr(three.find("//") + 2)) - 1;
 
 				// Process the index.
-				vIndices.push_back(vIdx);
-				vnIndices.push_back(vnIdx);
+				indices.push_back(pIdx);
+				indices.push_back(nIdx);
 			}
 		}
 	}
@@ -77,51 +77,51 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 	 * screen.
 	 */
 
-	GLfloat minX = vertices[0].x;
-	GLfloat maxX = vertices[0].x;
-	GLfloat minY = vertices[0].y;
-	GLfloat maxY = vertices[0].y;
-	GLfloat minZ = vertices[0].z;
-	GLfloat maxZ = vertices[0].z;
+	GLfloat minX = points[0].x;
+	GLfloat maxX = points[0].x;
+	GLfloat minY = points[0].y;
+	GLfloat maxY = points[0].y;
+	GLfloat minZ = points[0].z;
+	GLfloat maxZ = points[0].z;
 
-	int numVertices = vertices.size();
+	int numPoints = points.size();
 
-	for (int i = 0; i < numVertices; i++) {
-		if (minX > vertices[i].x)
-			minX = vertices[i].x;
-		if (maxX < vertices[i].x)
-			maxX = vertices[i].x;
-		if (minY > vertices[i].y)
-			minY = vertices[i].y;
-		if (maxY < vertices[i].y)
-			maxY = vertices[i].y;
-		if (minZ > vertices[i].z)
-			minZ = vertices[i].z;
-		if (maxZ < vertices[i].z)
-			maxZ = vertices[i].z;
+	for (int i = 0; i < numPoints; i++) {
+		if (minX > points[i].x)
+			minX = points[i].x;
+		if (maxX < points[i].x)
+			maxX = points[i].x;
+		if (minY > points[i].y)
+			minY = points[i].y;
+		if (maxY < points[i].y)
+			maxY = points[i].y;
+		if (minZ > points[i].z)
+			minZ = points[i].z;
+		if (maxZ < points[i].z)
+			maxZ = points[i].z;
 	}
 
 	GLfloat centX = (minX + maxX) / 2;
 	GLfloat centY = (minY + maxY) / 2;
 	GLfloat centZ = (minZ + maxZ) / 2;
 
-	for (int i = 0; i < numVertices; i++) {
-		vertices[i].x -= centX;
-		vertices[i].y -= centY;
-		vertices[i].z -= centZ;
+	for (int i = 0; i < numPoints; i++) {
+		points[i].x -= centX;
+		points[i].y -= centY;
+		points[i].z -= centZ;
 	}
 
-	GLfloat maxDist = sqrt((vertices[0].x) * (vertices[0].x) + (vertices[0].y) * (vertices[0].y) + (vertices[0].z) * (vertices[0].z));
+	GLfloat maxDist = sqrt((points[0].x) * (points[0].x) + (points[0].y) * (points[0].y) + (points[0].z) * (points[0].z));
 
-	for (int i = 0; i < numVertices; i++) {
-		if (maxDist < sqrt((vertices[i].x) * (vertices[i].x) + (vertices[i].y) * (vertices[i].y) + (vertices[i].z) * (vertices[i].z)))
-			maxDist = sqrt((vertices[i].x) * (vertices[i].x) + (vertices[i].y) * (vertices[i].y) + (vertices[i].z) * (vertices[i].z));
+	for (int i = 0; i < numPoints; i++) {
+		if (maxDist < sqrt((points[i].x) * (points[i].x) + (points[i].y) * (points[i].y) + (points[i].z) * (points[i].z)))
+			maxDist = sqrt((points[i].x) * (points[i].x) + (points[i].y) * (points[i].y) + (points[i].z) * (points[i].z));
 	}
 
-	for (int i = 0; i < numVertices; i++) {
-		vertices[i].x *= 9.5 / maxDist;
-		vertices[i].y *= 9.5 / maxDist;
-		vertices[i].z *= 9.5 / maxDist;
+	for (int i = 0; i < numPoints; i++) {
+		points[i].x *= 9.5 / maxDist;
+		points[i].y *= 9.5 / maxDist;
+		points[i].z *= 9.5 / maxDist;
 	}
 
 	// Set the model matrix to an identity matrix. 
@@ -130,22 +130,35 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 	// Set the color. 
 	color = glm::vec3(1, 0, 0);
 
-	// Generate a Vertex Array (VAO) and Vertex Buffer Object (VBO)
+	// Generate a Vertex Array (VAO)
 	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
 
+	// Generate a Vertex Buffer Object (VBO)
+	glGenBuffers(1, &VBO);
+	
 	// Bind VAO
 	glBindVertexArray(VAO);
 
 	// Bind VBO to the bound VAO, and store the point data
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * points.size(), points.data(), GL_STATIC_DRAW);
 	// Enable Vertex Attribute 0 to pass point data through to the shader
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 
-	// Unbind the VBO/VAO
+	// Unbind the VBO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+
+	// Generate EBO, bind the EBO to the bound VAO and send the data
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(glm::ivec3)* indices.size(), indices.data(), GL_STATIC_DRAW);
+
+	// Unbind the EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	// Unbind the VAO
 	glBindVertexArray(0);
 }
 
@@ -170,12 +183,15 @@ void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint
 
 	// Bind the VAO
 	glBindVertexArray(VAO);
-
+	/*
 	// Set point size
 	glPointSize(pointSize);
 
 	// Draw the points 
-	glDrawArrays(GL_POINTS, 0, vertices.size());
+	glDrawArrays(GL_POINTS, 0, points.size());
+	*/
+	// Draw the points using triangles, indexed with the EBO
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
 	// Unbind the VAO and shader program
 	glBindVertexArray(0);
