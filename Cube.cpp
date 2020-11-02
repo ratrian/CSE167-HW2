@@ -57,7 +57,7 @@ Cube::Cube(float size)
 		glm::ivec3(6, 2, 1),
 	}; 
 
-	// Generate a vertex array (VAO) and vertex buffer object (VBO).
+	// Generate a vertex array (VAO) and a vertex buffer object (VBO).
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 

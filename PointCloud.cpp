@@ -63,7 +63,7 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 
 				// Process the index.
 				indices.push_back(pIdx);
-				indices.push_back(nIdx);
+				//indices.push_back(nIdx);
 			}
 		}
 	}
@@ -130,13 +130,11 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 	// Set the color. 
 	color = glm::vec3(1, 0, 0);
 
-	// Generate a Vertex Array (VAO)
+	// Generate a Vertex Array (VAO) and a Vertex Buffer Object (VBO)
 	glGenVertexArrays(1, &VAO);
-
-	// Generate a Vertex Buffer Object (VBO)
 	glGenBuffers(1, &VBO);
 	
-	// Bind VAO
+	// Bind to the VAO.
 	glBindVertexArray(VAO);
 
 	// Bind VBO to the bound VAO, and store the point data
@@ -146,19 +144,13 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 
-	// Unbind the VBO
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
-
 	// Generate EBO, bind the EBO to the bound VAO and send the data
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(glm::ivec3)* indices.size(), indices.data(), GL_STATIC_DRAW);
 
-	// Unbind the EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	// Unbind the VAO
+	// Unbind the VBO/VAO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
@@ -183,15 +175,9 @@ void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint
 
 	// Bind the VAO
 	glBindVertexArray(VAO);
-	/*
-	// Set point size
-	glPointSize(pointSize);
 
-	// Draw the points 
-	glDrawArrays(GL_POINTS, 0, points.size());
-	*/
 	// Draw the points using triangles, indexed with the EBO
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
 	// Unbind the VAO and shader program
 	glBindVertexArray(0);
