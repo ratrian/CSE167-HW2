@@ -235,7 +235,7 @@ void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 		{
 			float rotAngle = glm::degrees(glm::acos(glm::dot(lastPoint, currPoint)));
 			glm::vec3 rotAxis = glm::cross(lastPoint, currPoint);
-			glm::rotate(glm::mat4(1.0f), rotAngle, rotAxis);
+			glm::rotate(currPointCloud->getModel(), rotAngle, rotAxis);
 		}
 		lastPoint = currPoint;
 	}
@@ -245,7 +245,7 @@ void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
 	glMatrixMode(GL_PROJECTION);
 	glm::vec3 s; //
-	glm::scale(glm::mat4(1.0f), s);
+	glm::scale(currPointCloud->getModel(), s);
 }
 
 glm::vec3 Window::trackBallMapping(double xPos, double yPos)
