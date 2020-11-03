@@ -47,6 +47,8 @@ public:
 	static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 	static void cursorPosCallback(GLFWwindow* window, double xPos, double yPos);
 	static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+
+	static glm::vec3 trackBallMapping(double xPos, double yPos);
 };
 
 #endif

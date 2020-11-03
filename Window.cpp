@@ -208,8 +208,6 @@ void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int
 	{
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
-		Window::cursorPosCallback(window, xPos, yPos);
-
 	}
 }
 
@@ -223,4 +221,18 @@ void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
 	double xOff = xOffset;
 	double yOff = yOffset;
+}
+
+glm::vec3 Window::trackBallMapping(double xPos, double yPos)
+{
+	glm::vec3 v;
+	float d;
+	v.x = (2.0 * xPos - Window::height) / Window::height;
+	v.y = (Window::width - 2.0 * yPos) / Window::width;
+	v.z = 0.0;
+	d = glm::length(v);
+	d = (d < 1.0) ? d : 1.0;
+	v.z = sqrtf(1.001 - d * d);
+	glm::normalize(v);
+	return v;
 }
