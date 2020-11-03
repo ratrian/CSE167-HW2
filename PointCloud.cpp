@@ -200,5 +200,10 @@ void PointCloud::updatePointSize(GLfloat size)
 void PointCloud::spin(float rotAngle, glm::vec3 rotAxis)
 {
 	// Update the model matrix by multiplying a rotation matrix
-	model = glm::rotate(model, rotAngle, rotAxis);
+	model = glm::rotate(model, glm::degrees(rotAngle), rotAxis);
+}
+
+void PointCloud::zoom(glm::vec3 s)
+{
+	model = glm::scale(model, s);
 }

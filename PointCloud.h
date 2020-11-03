@@ -31,6 +31,7 @@ public:
 
 	void updatePointSize(GLfloat size);
 	void spin(float rotAngle, glm::vec3 rotAxis);
+	void zoom(glm::vec3 s);
 };
 
 #endif
