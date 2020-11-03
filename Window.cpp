@@ -233,7 +233,7 @@ void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 		float velocity = glm::length(direction);
 		if (velocity > 0.0001)
 		{
-			float rotAngle = glm::degrees(glm::acos(glm::dot(lastPoint, currPoint)));
+			float rotAngle = glm::degrees(glm::acos(glm::dot(lastPoint, currPoint) / (glm::length(lastPoint) * glm::length(currPoint))));
 			glm::vec3 rotAxis = glm::cross(lastPoint, currPoint);
 			currPointCloud->spin(rotAngle, rotAxis);
 		}
