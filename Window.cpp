@@ -5,6 +5,10 @@ int Window::width;
 int Window::height;
 const char* Window::windowTitle = "GLFW Starter Project";
 
+//
+bool Window::rotate;
+glm::vec3 Window::lastPoint;
+
 // Objects to Render
 PointCloud* Window::bunnyPoints;
 PointCloud* Window::sandalPoints;
@@ -206,23 +210,42 @@ void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		rotating = true;
-		glfwGetCursorPos(window, &xM0, &yM0);
-		//
+		rotate = true;
+
+		double xPos, yPos;
+		glfwGetCursorPos(window, &xPos, &yPos);
+		lastPoint = trackBallMapping(xPos, yPos);
+
+		glMatrixMode(GL_MODELVIEW);
+	}
+	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+	{
+		rotate = false;
 	}
 }
 
 void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 {
-	xM1 = xPos;
-	yM1 = yPos;
-	//
+	if (rotate)
+	{
+		glm::vec3 currPoint = trackBallMapping(xPos, yPos);
+		glm::vec3 direction = currPoint - lastPoint;
+		float velocity = glm::length(direction);
+		if (velocity > 0.0001)
+		{
+			float rotAngle = glm::degrees(glm::acos(glm::dot(lastPoint, currPoint)));
+			glm::vec3 rotAxis = glm::cross(lastPoint, currPoint);
+			glm::rotate(glm::mat4(1.0f), rotAngle, rotAxis);
+		}
+		lastPoint = currPoint;
+	}
 }
 
 void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
-	double xOff = xOffset;
-	double yOff = yOffset;
+	glMatrixMode(GL_PROJECTION);
+	glm::vec3 s; //
+	glm::scale(glm::mat4(1.0f), s);
 }
 
 glm::vec3 Window::trackBallMapping(double xPos, double yPos)
