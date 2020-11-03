@@ -204,7 +204,9 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
 
 void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	//
+	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+		//
+	}
 }
 
 void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
