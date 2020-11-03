@@ -206,11 +206,10 @@ void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		//
-	}
-	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
-	{
-		//
+		double xPos, yPos;
+		glfwGetCursorPos(window, &xPos, &yPos);
+		Window::cursorPosCallback(window, xPos, yPos);
+
 	}
 }
 
@@ -218,12 +217,10 @@ void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 {
 	double posX = xPos;
 	double posY = yPos;
-	//
 }
 
 void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
 	double xOff = xOffset;
 	double yOff = yOffset;
-	//
 }
