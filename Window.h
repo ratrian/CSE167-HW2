@@ -16,6 +16,15 @@ public:
 	static int height;
 	static const char* windowTitle;
 
+	//
+	static bool rotating;
+
+	//
+	static double xM0;
+	static double yM0;
+	static double xM1;
+	static double yM1;
+
 	// Objects to Render
 	static PointCloud* bunnyPoints;
 	static PointCloud* sandalPoints;
