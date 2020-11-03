@@ -30,7 +30,7 @@ public:
 	void update();
 
 	void updatePointSize(GLfloat size);
-	void spin(float deg);
+	void spin(float rotAngle, glm::vec3 rotAxis);
 };
 
 #endif

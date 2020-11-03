@@ -186,7 +186,7 @@ void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint
 void PointCloud::update()
 {
 	// Spin the cube by 1 degree
-	spin(0.1f);
+	spin(0.1f, glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void PointCloud::updatePointSize(GLfloat size) 
@@ -197,8 +197,8 @@ void PointCloud::updatePointSize(GLfloat size)
 	pointSize = size;
 }
 
-void PointCloud::spin(float deg)
+void PointCloud::spin(float rotAngle, glm::vec3 rotAxis)
 {
 	// Update the model matrix by multiplying a rotation matrix
-	model = model * glm::rotate(glm::radians(deg), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = model * glm::rotate(glm::radians(rotAngle), rotAxis);
 }
