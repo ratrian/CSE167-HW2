@@ -199,6 +199,18 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
 			pointSize = pointSize * 2;
 			currPointCloud->updatePointSize(pointSize);
 			break;
+		case GLFW_KEY_N:
+
+			break;
+		case GLFW_KEY_1:
+
+			break;
+		case GLFW_KEY_2:
+
+			break;
+		case GLFW_KEY_3:
+			
+			break;
 
 		default:
 			break;
