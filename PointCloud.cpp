@@ -129,14 +129,14 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, GLfloat norma
 	// Set the color. 
 	color = glm::vec3(1, 0, 0);
 
-	// Generate a Vertex Array (VAO) and a Vertex Buffer Object (VBO)
+	// Generate a Vertex Array (VAO)
 	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
 	
 	// Bind to the VAO.
 	glBindVertexArray(VAO);
 
-	// Bind VBO to the bound VAO, and store the point data
+	// Generate a Vertex Buffer Object (VBO) and bind to it
+	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * points.size(), points.data(), GL_STATIC_DRAW);
 	// Enable Vertex Attribute 0 to pass point data through to the shader
