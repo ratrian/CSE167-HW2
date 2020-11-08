@@ -1,18 +1,14 @@
 #version 330 core
 // This is a sample fragment shader.
 
-struct  Material {
-    uniform vec3 ambient;
-    uniform vec3 diffuse;
-    uniform vec3 specular;
-    uniform float shininess;
-};
+uniform vec3 ambient;
+uniform vec3 diffuse;
+uniform vec3 specular;
+uniform float shininess;
 
-struct PointLight {
-    uniform vec3 lightPos;
-    uniform vec3 lightCol;
-    uniform vec3 lightAtten;
-};
+uniform vec3 lightPos;
+uniform vec3 lightCol;
+uniform vec3 lightAtten;
 
 // Inputs to the fragment shader are the outputs of the same name from the vertex shader.
 // Note that you do not have access to the vertex shader's default output, gl_Position.

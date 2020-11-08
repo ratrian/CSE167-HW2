@@ -1,7 +1,7 @@
 #include "PointCloud.h"
 
-PointCloud::PointCloud(std::string objFilename, GLfloat pointSize)
-	: pointSize(pointSize)
+PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, Material* material, PointLight* pointLight)
+	: pointSize(pointSize), material(material), pointLight(pointLight)
 {
 	/*
 	 * TODO: Section 2: Currently, all the points are hard coded below.
@@ -171,6 +171,8 @@ void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint
 	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(model));
 	glUniform3fv(glGetUniformLocation(shader, "color"), 1, glm::value_ptr(color));
 	glUniform1f(glGetUniformLocation(shader, "pointSize"), pointSize);
+	material->sendMatToShader(shader);
+	pointLight->sendLightToShader(shader);
 
 	// Bind the VAO
 	glBindVertexArray(VAO);

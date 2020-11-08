@@ -5,9 +5,14 @@ int Window::width;
 int Window::height;
 const char* Window::windowTitle = "GLFW Starter Project";
 
-//
 bool Window::rotate;
 glm::vec3 Window::lastPoint;
+
+Material* bunnyPointsMaterial;
+Material* sandalPointsMaterial;
+Material* bearPointsMaterial;
+
+PointLight* pointLight;
 
 // Objects to Render
 PointCloud* Window::bunnyPoints;
@@ -48,10 +53,16 @@ bool Window::initializeObjects()
 {
 	pointSize = 30;
 
+	bunnyPointsMaterial = new Material(glm::vec3(0.329412, 0.223529, 0.027451), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.992157, 0.941176, 0.807843), 0.21794872);
+	sandalPointsMaterial = new Material(glm::vec3(0.25, 0.20725, 0.20725), glm::vec3(1.0, 0.829, 0.829), glm::vec3(0.0, 0.0, 0.0), 0.088);
+	bearPointsMaterial = new Material(glm::vec3(0.19225, 0.19225, 0.19225), glm::vec3(0.50754, 0.50754, 0.50754), glm::vec3(0.508273, 0.508273, 0.508273), 0.4);
+
+	pointLight = new PointLight(glm::vec3(3.0, 3.0, 3.0), glm::vec3(0.7, 0.7, 0.7), glm::vec3(2.0, 3.0, -1.0));
+
 	// Create point clouds consisting of objects vertices.
-	bunnyPoints = new PointCloud("bunny.obj", pointSize);
-	sandalPoints = new PointCloud("sandal.obj", pointSize);
-	bearPoints = new PointCloud("bear.obj", pointSize);
+	bunnyPoints = new PointCloud("bunny.obj", pointSize, bunnyPointsMaterial, pointLight);
+	sandalPoints = new PointCloud("sandal.obj", pointSize, sandalPointsMaterial, pointLight);
+	bearPoints = new PointCloud("bear.obj", pointSize, bearPointsMaterial, pointLight);
 
 	// Set bunny to be the first to display
 	currPointCloud = bunnyPoints;
@@ -61,6 +72,12 @@ bool Window::initializeObjects()
 
 void Window::cleanUp()
 {
+	delete bunnyPointsMaterial;
+	delete sandalPointsMaterial;
+	delete bearPointsMaterial;
+
+	delete pointLight;
+
 	// Deallcoate the objects.
 	delete bunnyPoints;
 	delete sandalPoints;

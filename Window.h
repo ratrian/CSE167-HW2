@@ -16,7 +16,6 @@ public:
 	static int height;
 	static const char* windowTitle;
 
-	//
 	static bool rotate;
 	static glm::vec3 lastPoint;
 

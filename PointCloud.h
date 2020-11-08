@@ -2,6 +2,8 @@
 #define _POINT_CLOUD_H_
 
 #include "Object.h"
+#include "Material.h"
+#include "PointLight.h"
 
 #include <string>
 #include <vector>
@@ -20,10 +22,13 @@ private:
 	std::vector<glm::ivec3> indices;
 
 	GLuint VAO, VBO, EBO;
+	
 	GLfloat pointSize;
+	Material* material;
+	PointLight* pointLight;
 
 public:
-	PointCloud(std::string objFilename, GLfloat pointSize);
+	PointCloud(std::string objFilename, GLfloat pointSize, Material* material, PointLight* pointLight);
 	~PointCloud();
 	
 	void draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader);
