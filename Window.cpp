@@ -20,7 +20,7 @@ PointCloud* Window::sandalPoints;
 PointCloud* Window::bearPoints;
 PointCloud* currPointCloud;
 
-GLfloat pointSize;
+GLfloat pointSize, normalColoring;
 
 // Camera Matrices 
 // Projection matrix:
@@ -51,7 +51,8 @@ bool Window::initializeProgram() {
 
 bool Window::initializeObjects()
 {
-	pointSize = 30;
+	pointSize = 30.0;
+	normalColoring = 1.0;
 
 	bunnyPointsMaterial = new Material(glm::vec3(0.329412, 0.223529, 0.027451), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.992157, 0.941176, 0.807843), 0.21794872);
 	sandalPointsMaterial = new Material(glm::vec3(0.25, 0.20725, 0.20725), glm::vec3(1.0, 0.829, 0.829), glm::vec3(0.0, 0.0, 0.0), 0.088);
@@ -60,9 +61,9 @@ bool Window::initializeObjects()
 	pointLight = new PointLight(glm::vec3(3.0, 3.0, 3.0), glm::vec3(0.7, 0.7, 0.7), glm::vec3(2.0, 3.0, -1.0));
 
 	// Create point clouds consisting of objects vertices.
-	bunnyPoints = new PointCloud("bunny.obj", pointSize, bunnyPointsMaterial, pointLight);
-	sandalPoints = new PointCloud("sandal.obj", pointSize, sandalPointsMaterial, pointLight);
-	bearPoints = new PointCloud("bear.obj", pointSize, bearPointsMaterial, pointLight);
+	bunnyPoints = new PointCloud("bunny.obj", pointSize, normalColoring, bunnyPointsMaterial, pointLight);
+	sandalPoints = new PointCloud("sandal.obj", pointSize, normalColoring, sandalPointsMaterial, pointLight);
+	bearPoints = new PointCloud("bear.obj", pointSize, normalColoring, bearPointsMaterial, pointLight);
 
 	// Set bunny to be the first to display
 	currPointCloud = bunnyPoints;
@@ -217,7 +218,13 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
 			currPointCloud->updatePointSize(pointSize);
 			break;
 		case GLFW_KEY_N:
-
+			if (normalColoring == 0.0) {
+				normalColoring = 1.0;
+			}
+			else if (normalColoring == 1.0) {
+				normalColoring = 0.0;
+			}
+			currPointCloud->updateNormalColoring(normalColoring);
 			break;
 		case GLFW_KEY_1:
 

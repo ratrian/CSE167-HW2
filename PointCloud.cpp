@@ -1,7 +1,7 @@
 #include "PointCloud.h"
 
-PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, Material* material, PointLight* pointLight)
-	: pointSize(pointSize), material(material), pointLight(pointLight)
+PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, GLfloat normalColoring, Material* material, PointLight* pointLight)
+	: pointSize(pointSize), normalColoring(normalColoring), material(material), pointLight(pointLight)
 {
 	/*
 	 * TODO: Section 2: Currently, all the points are hard coded below.
@@ -143,6 +143,13 @@ PointCloud::PointCloud(std::string objFilename, GLfloat pointSize, Material* mat
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 
+	glGenBuffers(1, &NBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, NBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)* normals.size(), normals.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
 	// Generate EBO, bind the EBO to the bound VAO and send the data
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -169,8 +176,9 @@ void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint
 	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, false, glm::value_ptr(view));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, false, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-	glUniform3fv(glGetUniformLocation(shader, "color"), 1, glm::value_ptr(color));
+	//glUniform3fv(glGetUniformLocation(shader, "color"), 1, glm::value_ptr(color));
 	glUniform1f(glGetUniformLocation(shader, "pointSize"), pointSize);
+	glUniform1f(glGetUniformLocation(shader, "normalColoring"), normalColoring);
 	material->sendMatToShader(shader);
 	pointLight->sendLightToShader(shader);
 
@@ -197,6 +205,11 @@ void PointCloud::updatePointSize(GLfloat size)
 	 * TODO: Section 3: Implement this function to adjust the point size.
 	 */
 	pointSize = size;
+}
+
+void PointCloud::updateNormalColoring(GLfloat normalColoring)
+{
+	PointCloud::normalColoring = normalColoring;
 }
 
 void PointCloud::spin(float rotAngle, glm::vec3 rotAxis)

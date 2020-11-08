@@ -21,20 +21,21 @@ private:
 	std::vector<glm::vec3> normals;
 	std::vector<glm::ivec3> indices;
 
-	GLuint VAO, VBO, EBO;
+	GLuint VAO, VBO, NBO, EBO;
 	
-	GLfloat pointSize;
+	GLfloat pointSize, normalColoring;
 	Material* material;
 	PointLight* pointLight;
 
 public:
-	PointCloud(std::string objFilename, GLfloat pointSize, Material* material, PointLight* pointLight);
+	PointCloud(std::string objFilename, GLfloat pointSize, GLfloat normalColoring, Material* material, PointLight* pointLight);
 	~PointCloud();
 	
 	void draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader);
 	void update();
 
 	void updatePointSize(GLfloat size);
+	void updateNormalColoring(GLfloat normalColoring);
 	void spin(float rotAngle, glm::vec3 rotAxis);
 	void zoom(glm::vec3 s);
 };
