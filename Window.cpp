@@ -282,9 +282,10 @@ void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 			glm::vec3 rotAxis = glm::cross(lastPoint, currPoint);
 			if (actionObject)
 				currPointCloud->spin(rotAngle, rotAxis);
-			if (actionLightSource)
+			if (actionLightSource) {
 				pointLight->updatePosition(direction, rotAngle, rotAxis);
 				lightSource->orbit(rotAngle, rotAxis);
+			}
 		}
 		lastPoint = currPoint;
 	}
