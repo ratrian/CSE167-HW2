@@ -176,7 +176,6 @@ void PointCloud::draw(const glm::mat4& view, const glm::mat4& projection, GLuint
 	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, false, glm::value_ptr(view));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, false, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-	//glUniform3fv(glGetUniformLocation(shader, "color"), 1, glm::value_ptr(color));
 	glUniform1f(glGetUniformLocation(shader, "pointSize"), pointSize);
 	glUniform1f(glGetUniformLocation(shader, "normalColoring"), normalColoring);
 	material->sendMatToShader(shader);
