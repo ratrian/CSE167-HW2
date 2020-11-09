@@ -14,4 +14,5 @@ void Material::sendMatToShader(GLuint shader)
 	glUniform3fv(glGetUniformLocation(shader, "diffuse"), 1, glm::value_ptr(diffuse));
 	glUniform3fv(glGetUniformLocation(shader, "specular"), 1, glm::value_ptr(specular));
 	glUniform1f(glGetUniformLocation(shader, "shininess"), shininess);
+	glUniform1f(glGetUniformLocation(shader, "drawSphere"), 0.0);
 }

@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Material.h"
 #include "PointLight.h"
+#include "LightSource.h"
 
 #include <string>
 #include <vector>
@@ -26,6 +27,7 @@ private:
 	GLfloat pointSize, normalColoring;
 	Material* material;
 	PointLight* pointLight;
+	LightSource* lightSource;
 
 public:
 	PointCloud(std::string objFilename, GLfloat pointSize, GLfloat normalColoring, Material* material, PointLight* pointLight);

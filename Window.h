@@ -16,13 +16,18 @@ public:
 	static int height;
 	static const char* windowTitle;
 
-	static bool rotate;
+	static bool activated, actionObject, actionLightSource;
 	static glm::vec3 lastPoint;
+
+	static PointLight* pointLight;
+	static LightSource* lightSource;
 
 	// Objects to Render
 	static PointCloud* bunnyPoints;
 	static PointCloud* sandalPoints;
 	static PointCloud* bearPoints;
+
+	static GLfloat normalColoring;
 
 	// Camera Matrices
 	static glm::mat4 projection;

@@ -5,14 +5,17 @@ int Window::width;
 int Window::height;
 const char* Window::windowTitle = "GLFW Starter Project";
 
-bool Window::rotate;
+bool Window::activated = false;
+bool Window::actionObject = true;
+bool Window::actionLightSource = false;
 glm::vec3 Window::lastPoint;
 
 Material* bunnyPointsMaterial;
 Material* sandalPointsMaterial;
 Material* bearPointsMaterial;
 
-PointLight* pointLight;
+PointLight* Window::pointLight;
+LightSource* Window::lightSource;
 
 // Objects to Render
 PointCloud* Window::bunnyPoints;
@@ -20,9 +23,10 @@ PointCloud* Window::sandalPoints;
 PointCloud* Window::bearPoints;
 PointCloud* currPointCloud;
 
-GLfloat pointSize, normalColoring;
+GLfloat Window::normalColoring = 1.0;
+GLfloat pointSize;
 
-// Camera Matrices 
+// Camera Matrices
 // Projection matrix:
 glm::mat4 Window::projection; 
 
@@ -52,13 +56,13 @@ bool Window::initializeProgram() {
 bool Window::initializeObjects()
 {
 	pointSize = 30.0;
-	normalColoring = 1.0;
 
 	bunnyPointsMaterial = new Material(glm::vec3(0.329412, 0.223529, 0.027451), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.992157, 0.941176, 0.807843), 0.21794872);
 	sandalPointsMaterial = new Material(glm::vec3(0.25, 0.20725, 0.20725), glm::vec3(1.0, 0.829, 0.829), glm::vec3(0.0, 0.0, 0.0), 0.088);
 	bearPointsMaterial = new Material(glm::vec3(0.19225, 0.19225, 0.19225), glm::vec3(0.50754, 0.50754, 0.50754), glm::vec3(0.508273, 0.508273, 0.508273), 0.4);
 
 	pointLight = new PointLight(glm::vec3(3.0, 3.0, 3.0), glm::vec3(0.7, 0.7, 0.7), glm::vec3(-0.05, 0.9, 0.0));
+	lightSource = new LightSource("sphere.obj", glm::vec3(6.0, 6.0, 6.0), glm::vec3(0.7, 0.7, 0.7), glm::vec3(-0.05, 0.9, 0.0));
 
 	// Create point clouds consisting of objects vertices.
 	bunnyPoints = new PointCloud("bunny.obj", pointSize, normalColoring, bunnyPointsMaterial, pointLight);
@@ -76,6 +80,8 @@ void Window::cleanUp()
 	delete bunnyPointsMaterial;
 	delete sandalPointsMaterial;
 	delete bearPointsMaterial;
+
+	delete lightSource;
 
 	delete pointLight;
 
@@ -176,6 +182,8 @@ void Window::displayCallback(GLFWwindow* window)
 	// Render the objects
 	currPointCloud->draw(view, projection, shaderProgram);
 
+	lightSource->draw(view, projection, shaderProgram);
+
 	// Gets events, including input such as keyboard and mouse or window resizing
 	glfwPollEvents();
 
@@ -227,13 +235,16 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
 			currPointCloud->updateNormalColoring(normalColoring);
 			break;
 		case GLFW_KEY_1:
-
+			actionObject = true;
+			actionLightSource = false;
 			break;
 		case GLFW_KEY_2:
-
+			actionObject = false;
+			actionLightSource = true;
 			break;
 		case GLFW_KEY_3:
-			
+			actionObject = true;
+			actionLightSource = true;
 			break;
 
 		default:
@@ -246,7 +257,7 @@ void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		rotate = true;
+		activated = true;
 
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
@@ -255,14 +266,12 @@ void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int
 		glMatrixMode(GL_MODELVIEW);
 	}
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
-	{
-		rotate = false;
-	}
+		activated = false;
 }
 
 void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 {
-	if (rotate)
+	if (activated)
 	{
 		glm::vec3 currPoint = trackBallMapping(xPos, yPos);
 		glm::vec3 direction = currPoint - lastPoint;
@@ -271,7 +280,11 @@ void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 		{
 			float rotAngle = velocity * 0.05;
 			glm::vec3 rotAxis = glm::cross(lastPoint, currPoint);
-			currPointCloud->spin(rotAngle, rotAxis);
+			if (actionObject)
+				currPointCloud->spin(rotAngle, rotAxis);
+			if (actionLightSource)
+				pointLight->updatePosition(direction, rotAngle, rotAxis);
+				lightSource->orbit(rotAngle, rotAxis);
 		}
 		lastPoint = currPoint;
 	}
@@ -284,7 +297,10 @@ void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 	s.x = 1.0 + yOffset * 0.01;
 	s.y = 1.0 + yOffset * 0.01;
 	s.z = 1.0 + yOffset * 0.01;
-	currPointCloud->zoom(s);
+	if (actionObject)
+		currPointCloud->zoom(s);
+	if (actionLightSource)
+		lightSource->move(s);
 }
 
 glm::vec3 Window::trackBallMapping(double xPos, double yPos)

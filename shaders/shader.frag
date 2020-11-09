@@ -2,6 +2,7 @@
 // This is a sample fragment shader.
 
 uniform float normalColoring;
+uniform float drawSphere;
 
 uniform vec3 ambient;
 uniform vec3 diffuse;
@@ -9,6 +10,7 @@ uniform vec3 specular;
 uniform float shininess;
 
 uniform vec3 lightPos;
+uniform vec3 lightSourcePos;
 uniform vec3 lightCol;
 uniform vec3 lightAtten;
 
@@ -27,14 +29,21 @@ void main()
     // Use the color passed in. An alpha of 1.0f means it is not transparent.
     vec3 norm = normalize(normalOutput);
 
-    if (normalColoring == 1.0) {
-        norm = 0.5 * norm + 0.5;
-        fragColor = vec4(norm, 1.0);
-    }
-    else if (normalColoring == 0.0) {
-        vec3 viewDir = normalize(posOutput);
-        vec3 result = CalcPointLight(posOutput, norm, viewDir);
-        fragColor = vec4(result, 1.0);
+    if (drawSphere == 1.0) {
+        if (normalColoring == 1.0)
+            fragColor = vec4(vec3(0.0), 1.0);
+        else
+            fragColor = vec4(ambient, 1.0);
+    } else if (drawSphere == 0.0) {
+        if (normalColoring == 1.0) {
+            norm = 0.5 * norm + 0.5;
+            fragColor = vec4(norm, 1.0);
+        }
+        else if (normalColoring == 0.0) {
+            vec3 viewDir = normalize(posOutput);
+            vec3 result = CalcPointLight(posOutput, norm, viewDir);
+            fragColor = vec4(result, 1.0);
+        }
     }
 }
 
