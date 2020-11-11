@@ -5,7 +5,6 @@ PointLight::PointLight(glm::vec3 pos, glm::vec3 color, glm::vec3 atten)
 	PointLight::pos = pos;
 	PointLight::color = color;
 	PointLight::atten = atten;
-	PointLight::mat = glm::mat4(1.0);
 }
 
 void PointLight::sendLightToShader(GLuint shader)
@@ -17,7 +16,8 @@ void PointLight::sendLightToShader(GLuint shader)
 
 void PointLight::updatePosition(glm::vec3 direction, float rotAngle, glm::vec3 rotAxis)
 {
-	mat = glm::translate(mat, direction);
-	mat = glm::rotate(mat, rotAngle, rotAxis);
-	pos = mat * glm::vec4(pos, 1.0);
+	glm::mat4 mT = glm::translate(glm::mat4(1.0), direction);
+	glm::mat4 mR = glm::rotate(glm::mat4(1.0), rotAngle, rotAxis);
+	pos = mT * glm::vec4(pos, 1.0);
+	pos = mR * glm::vec4(pos, 1.0);
 }

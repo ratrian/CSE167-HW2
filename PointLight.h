@@ -15,7 +15,6 @@ private:
 	 *     atten.z = quadratic factor
 	 */
 	glm::vec3 pos, color, atten;
-	glm::mat4 mat;
 
 public:
 	PointLight(glm::vec3 pos, glm::vec3 color, glm::vec3 atten);

@@ -284,7 +284,7 @@ void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 				currPointCloud->spin(rotAngle, rotAxis);
 			if (actionLightSource) {
 				pointLight->updatePosition(direction, rotAngle, rotAxis);
-				lightSource->orbit(rotAngle, rotAxis);
+				lightSource->orbit(direction, rotAngle, rotAxis);
 			}
 		}
 		lastPoint = currPoint;

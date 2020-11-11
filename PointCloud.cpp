@@ -214,7 +214,8 @@ void PointCloud::updateNormalColoring(GLfloat normalColoring)
 void PointCloud::spin(float rotAngle, glm::vec3 rotAxis)
 {
 	// Update the model matrix by multiplying a rotation matrix
-	model = glm::rotate(model, glm::degrees(rotAngle), rotAxis);
+	glm::mat4 m = glm::rotate(glm::mat4(1.0), glm::degrees(rotAngle), rotAxis);
+	model = m * model;
 }
 
 void PointCloud::zoom(glm::vec3 s)
