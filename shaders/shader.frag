@@ -10,7 +10,6 @@ uniform vec3 specular;
 uniform float shininess;
 
 uniform vec3 lightPos;
-uniform vec3 lightSourcePos;
 uniform vec3 lightCol;
 uniform vec3 lightAtten;
 
@@ -33,7 +32,7 @@ void main()
         if (normalColoring == 1.0)
             fragColor = vec4(vec3(0.0), 1.0);
         else
-            fragColor = vec4(ambient, 1.0);
+            fragColor = vec4(lightCol, 1.0);
     } else if (drawSphere == 0.0) {
         if (normalColoring == 1.0) {
             norm = 0.5 * norm + 0.5;

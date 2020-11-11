@@ -1,6 +1,6 @@
 #include "LightSource.h"
 
-LightSource::LightSource(std::string objFilename, glm::vec3 pos, glm::vec3 color, glm::vec3 atten)
+LightSource::LightSource(std::string objFilename, PointLight* pointLight) : pointLight(pointLight)
 {
 	std::ifstream objFile(objFilename); // The obj file we are reading.
 
@@ -65,15 +65,11 @@ LightSource::LightSource(std::string objFilename, glm::vec3 pos, glm::vec3 color
 
 	objFile.close();
 
-	LightSource::pos = pos;
-	LightSource::color = color;
-	LightSource::atten = atten;
-
 	int numPoints = points.size();
 	for (int i = 0; i < numPoints; i++) {
-		points[i].x += pos.x;
-		points[i].y += pos.y;
-		points[i].z += pos.z;
+		points[i].x += pointLight->getPos().x;
+		points[i].y += pointLight->getPos().y;
+		points[i].z += pointLight->getPos().z;
 	}
 
 	// Set the model matrix to an identity matrix. 
@@ -126,9 +122,7 @@ void LightSource::draw(const glm::mat4& view, const glm::mat4& projection, GLuin
 	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, false, glm::value_ptr(view));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, false, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-	glUniform3fv(glGetUniformLocation(shader, "ambient"), 1, glm::value_ptr(color));
-	glUniform3fv(glGetUniformLocation(shader, "lightSourcePos"), 1, glm::value_ptr(pos));
-	glUniform3fv(glGetUniformLocation(shader, "lightAtten"), 1, glm::value_ptr(atten));
+	pointLight->sendLightToShader(shader);
 	glUniform1f(glGetUniformLocation(shader, "drawSphere"), 1.0);
 
 	// Bind the VAO
@@ -153,9 +147,11 @@ void LightSource::orbit(glm::vec3 direction, float rotAngle, glm::vec3 rotAxis)
 	glm::mat4 mR = glm::rotate(glm::mat4(1.0), glm::degrees(rotAngle), rotAxis);
 	model = mT * model;
 	model = mR * model;
+	pointLight->orbit(direction, rotAngle, rotAxis);
 }
 
 void LightSource::move(glm::vec3 t)
 {
 	model = glm::translate(model, t);
+	pointLight->move(t);
 }

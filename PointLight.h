@@ -20,7 +20,9 @@ public:
 	PointLight(glm::vec3 pos, glm::vec3 color, glm::vec3 atten);
 
 	void sendLightToShader(GLuint shader);
-	void updatePosition(glm::vec3 direction, float rotAngle, glm::vec3 rotAxis);
+	glm::vec3 getPos();
+	void orbit(glm::vec3 direction, float rotAngle, glm::vec3 rotAxis);
+	void move(glm::vec3 t);
 };
 
 #endif

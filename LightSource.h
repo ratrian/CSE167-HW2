@@ -2,6 +2,7 @@
 #define _LIGHT_SOURCE_H_
 
 #include "Object.h"
+#include "PointLight.h"
 
 #include <string>
 #include <vector>
@@ -23,16 +24,10 @@ private:
 
 	GLfloat pointSize, normalColoring;
 
-	/*
-	 * Attenuation vector consists of
-	 *     atten.x = constant factor
-	 *     atten.y = linear factor
-	 *     atten.z = quadratic factor
-	 */
-	glm::vec3 pos, color, atten;
+	PointLight* pointLight;
 
 public:
-	LightSource(std::string objFilename, glm::vec3 pos, glm::vec3 color, glm::vec3 atten);
+	LightSource(std::string objFilename, PointLight* pointLight);
 	~LightSource();
 
 	void draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader);

@@ -62,12 +62,12 @@ bool Window::initializeObjects()
 	bearPointsMaterial = new Material(glm::vec3(0.19225, 0.19225, 0.19225), glm::vec3(0.50754, 0.50754, 0.50754), glm::vec3(0.508273, 0.508273, 0.508273), 0.4);
 
 	pointLight = new PointLight(glm::vec3(3.0, 3.0, 3.0), glm::vec3(0.7, 0.7, 0.7), glm::vec3(-0.05, 0.9, 0.0));
-	lightSource = new LightSource("sphere.obj", glm::vec3(6.0, 6.0, 6.0), glm::vec3(0.7, 0.7, 0.7), glm::vec3(-0.05, 0.9, 0.0));
+	lightSource = new LightSource("sphere.obj", pointLight);
 
 	// Create point clouds consisting of objects vertices.
-	bunnyPoints = new PointCloud("bunny.obj", pointSize, normalColoring, bunnyPointsMaterial, pointLight);
-	sandalPoints = new PointCloud("sandal.obj", pointSize, normalColoring, sandalPointsMaterial, pointLight);
-	bearPoints = new PointCloud("bear.obj", pointSize, normalColoring, bearPointsMaterial, pointLight);
+	bunnyPoints = new PointCloud("bunny.obj", pointSize, normalColoring, bunnyPointsMaterial);
+	sandalPoints = new PointCloud("sandal.obj", pointSize, normalColoring, sandalPointsMaterial);
+	bearPoints = new PointCloud("bear.obj", pointSize, normalColoring, bearPointsMaterial);
 
 	// Set bunny to be the first to display
 	currPointCloud = bunnyPoints;
@@ -81,9 +81,8 @@ void Window::cleanUp()
 	delete sandalPointsMaterial;
 	delete bearPointsMaterial;
 
-	delete lightSource;
-
 	delete pointLight;
+	delete lightSource;
 
 	// Deallcoate the objects.
 	delete bunnyPoints;
@@ -282,10 +281,8 @@ void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 			glm::vec3 rotAxis = glm::cross(lastPoint, currPoint);
 			if (actionObject)
 				currPointCloud->spin(rotAngle, rotAxis);
-			if (actionLightSource) {
-				pointLight->updatePosition(direction, rotAngle, rotAxis);
+			if (actionLightSource)
 				lightSource->orbit(direction, rotAngle, rotAxis);
-			}
 		}
 		lastPoint = currPoint;
 	}
@@ -296,10 +293,8 @@ void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 	glMatrixMode(GL_PROJECTION);
 	if (actionObject)
 		currPointCloud->zoom(glm::vec3(1.0 + yOffset * 0.01));
-	if (actionLightSource) {
-		//
+	if (actionLightSource)
 		lightSource->move(glm::vec3(yOffset * 0.01));
-	}
 }
 
 glm::vec3 Window::trackBallMapping(double xPos, double yPos)

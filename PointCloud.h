@@ -3,7 +3,6 @@
 
 #include "Object.h"
 #include "Material.h"
-#include "PointLight.h"
 #include "LightSource.h"
 
 #include <string>
@@ -26,11 +25,9 @@ private:
 	
 	GLfloat pointSize, normalColoring;
 	Material* material;
-	PointLight* pointLight;
-	LightSource* lightSource;
 
 public:
-	PointCloud(std::string objFilename, GLfloat pointSize, GLfloat normalColoring, Material* material, PointLight* pointLight);
+	PointCloud(std::string objFilename, GLfloat pointSize, GLfloat normalColoring, Material* material);
 	~PointCloud();
 	
 	void draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader);
