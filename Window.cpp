@@ -294,12 +294,8 @@ void Window::cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
 	glMatrixMode(GL_PROJECTION);
-	glm::vec3 s;
-	s.x = 1.0 + yOffset * 0.01;
-	s.y = 1.0 + yOffset * 0.01;
-	s.z = 1.0 + yOffset * 0.01;
 	if (actionObject)
-		currPointCloud->zoom(s);
+		currPointCloud->zoom(glm::vec3(1.0 + yOffset * 0.01));
 	if (actionLightSource) {
 		//
 		lightSource->move(glm::vec3(yOffset * 0.01));

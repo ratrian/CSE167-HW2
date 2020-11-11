@@ -38,7 +38,7 @@ public:
 	void draw(const glm::mat4& view, const glm::mat4& projection, GLuint shader);
 	void update();
 	void orbit(glm::vec3 direction, float rotAngle, glm::vec3 rotAxis);
-	void move(glm::vec3 s);
+	void move(glm::vec3 t);
 };
 
 #endif
