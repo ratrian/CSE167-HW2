@@ -300,8 +300,10 @@ void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 	s.z = 1.0 + yOffset * 0.01;
 	if (actionObject)
 		currPointCloud->zoom(s);
-	if (actionLightSource)
-		lightSource->move(s);
+	if (actionLightSource) {
+		//
+		lightSource->move(glm::vec3(yOffset * 0.01));
+	}
 }
 
 glm::vec3 Window::trackBallMapping(double xPos, double yPos)

@@ -157,5 +157,5 @@ void LightSource::orbit(glm::vec3 direction, float rotAngle, glm::vec3 rotAxis)
 
 void LightSource::move(glm::vec3 s)
 {
-	//model = glm::translate(model, s);
+	model = glm::translate(model, s);
 }
