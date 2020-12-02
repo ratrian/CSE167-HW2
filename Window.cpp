@@ -294,7 +294,7 @@ void Window::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 	if (actionObject)
 		currPointCloud->zoom(glm::vec3(1.0 + yOffset * 0.01));
 	if (actionLightSource)
-		lightSource->move(glm::vec3(yOffset * 0.01));
+		lightSource->translate(glm::vec3(yOffset * 0.01));
 }
 
 glm::vec3 Window::trackBallMapping(double xPos, double yPos)

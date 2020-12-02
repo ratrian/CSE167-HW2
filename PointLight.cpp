@@ -22,11 +22,11 @@ void PointLight::orbit(glm::vec3 direction, float rotAngle, glm::vec3 rotAxis)
 {
 	glm::mat4 mT = glm::translate(glm::mat4(1.0), direction);
 	glm::mat4 mR = glm::rotate(glm::mat4(1.0), rotAngle, rotAxis);
-	pos = mT * glm::vec4(pos, 1.0);
+	pos = mT * glm::vec4(pos, 1.0) * mT;
 	pos = mR * glm::vec4(pos, 1.0);
 }
 
-void PointLight::move(glm::vec3 t)
+void PointLight::translate(glm::vec3 t)
 {
 	glm::mat4 mT = glm::translate(glm::mat4(1.0), t);
 	pos = mT * glm::vec4(pos, 1.0);
