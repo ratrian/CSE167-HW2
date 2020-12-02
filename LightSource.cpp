@@ -122,8 +122,8 @@ void LightSource::draw(const glm::mat4& view, const glm::mat4& projection, GLuin
 	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, false, glm::value_ptr(view));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, false, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-	pointLight->sendLightToShader(shader);
 	glUniform1f(glGetUniformLocation(shader, "drawSphere"), 1.0);
+	pointLight->sendLightToShader(shader);
 
 	// Bind the VAO
 	glBindVertexArray(VAO);
